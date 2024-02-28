@@ -1,0 +1,11 @@
+h2 movies
+nav id="movie_list"
+    -movies.each do |movie|
+        a href="/p/movies/movie/#{movie["id"]}" id="movie_card"
+                img src="#{movie["poster"]}" alt="#{movie["title"]} poster"/
+                div id="movie_card_info"
+                    h2 = movie["title"]
+                    h3 = movie["imdb_rating"]
+                    p = movie["release_year"]
+        end
+    end

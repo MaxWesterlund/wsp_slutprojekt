@@ -1,0 +1,19 @@
+div id="movie_info_wrapper"
+    h1 = movie["title"]
+    h2 = movie["release_year"]
+    div id="short_movie_info"
+        div id="movie_info_rating"
+            p = "imdb: #{movie["imdb_rating"]}"
+        div id="movie_info_runtime"
+            p = movie["runtime"]
+        div id="movie_info_director"
+            p = "directed by: #{movie["director"]}"
+    div id="movie_info_summary"
+        p = movie["summary"]
+    
+    -if !is_in_list
+        form action="save/#{movie["id"]}" method="post"
+            input type="submit" value="Add to list"
+    -else 
+        form action="remove/#{movie["id"]}" method="post"
+            input type="submit" value="Remove from list"

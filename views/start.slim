@@ -1,0 +1,27 @@
+-if message_position == "top"
+    h2 = message 
+end
+
+h1 Log in
+
+
+form action="/try_log_in" method="post"
+    input type="text" name="username" placeholder="Username"
+    input type="password" name="password" placeholder="Password"
+    input type="submit" value="Submit"
+
+-if message_position == "log in"
+    h3 = message
+end
+
+h1 Sign up
+
+form action="/try_sign_up" method="post"
+    input type="text" name="username" placeholder="Username"
+    input type="password" name="password" placeholder="Password"
+    input type="password" name="password_confirmation" placeholder="Confirm Password"
+    input type="submit" value="Submit"
+
+-if message_position == "sign up"
+    h3 = message
+end
