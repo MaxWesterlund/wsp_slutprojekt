@@ -5,6 +5,9 @@ header id="main_header"
         a href="/" Start
         a href="/p/movies" Movies
         a href="/p/watch_list" Watch List
-    
+    -if session[:user_id] != nil
+        div id="header_user_info"
+            a href="/p/user/#{session[:user_id]}"
+                h2 = find_user_by_id(session[:user_id])["username"]
 
 ==yield

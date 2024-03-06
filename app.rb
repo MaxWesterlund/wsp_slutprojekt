@@ -75,6 +75,11 @@ post("/try_log_in") do
     redirect("/p/movies")
 end
 
+post("/log_out") do
+    session[:user_id] = nil
+    redirect("/")
+end
+
 get("/p/user/:user_id") do
     user_id = params[:user_id]
 

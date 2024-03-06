@@ -9,7 +9,7 @@ def find_user_by_name(username)
 end
 
 def find_user_by_id(user_id)
-    get_db().execute("SELECT * FROM users WHERE username IS ?", user_id).first()
+    get_db().execute("SELECT * FROM users WHERE id IS ?", user_id).first()
 end
 
 def get_movies()
