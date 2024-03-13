@@ -20,6 +20,10 @@ def find_movie_by_id(movie_id)
     get_db().execute("SELECT * FROM movies WHERE id IS ?", movie_id).first()
 end
 
+def update_user_rating(movie_id, rating)
+    get_db().execute("UPDATE movies SET user_rating = ? WHERE id IS ?", rating, movie_id)
+end
+
 def find_saved_movies_by_user_id(user_id)
     get_db().execute("SELECT * FROM saved_movies WHERE user_id IS ?", user_id)
 end
@@ -34,6 +38,22 @@ end
 
 def remove_saved_movie(user_id, movie_id)
     get_db().execute("DELETE FROM saved_movies WHERE user_id IS ? AND movie_id IS ?", user_id, movie_id)
+end
+
+def find_reviews_by_movie(movie_id)
+    get_db().execute("SELECT * FROM reviews WHERE movie_id IS ?", movie_id)
+end
+
+def find_reviews_by_user_id_and_movie_id(user_id, movie_id)
+    get_db().execute("SELECT * FROM reviews WHERE user_id IS ? AND movie_id IS ?", user_id, movie_id)
+end
+
+def add_rating(user_id, movie_id, rating)
+    get_db().execute("INSERT INTO reviews (user_id, movie_id, rating) VALUES (?, ?, ?)", user_id, movie_id, rating)
+end
+
+def change_rating(user_id, movie_id, rating)
+    get_db().execute("UPDATE reviews SET rating = ? WHERE user_id IS ? AND movie_id IS ?", rating, user_id, movie_id)
 end
 
 def get_db()

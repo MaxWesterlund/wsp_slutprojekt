@@ -99,8 +99,10 @@ get("/p/movies/movie/:movie_id") do
 
     movie = find_movie_by_id(movie_id)
     is_in_list = !find_saved_movies_by_user_id_and_movie_id(user_id, movie_id).empty?()
+    reviews = find_reviews_by_user_id_and_movie_id(user_id, movie_id)
+    rating = reviews.empty? ? "unset" : reviews[0]["rating"]
 
-    slim(:movie_info, locals: { movie:movie, is_in_list:is_in_list })
+    slim(:movie_info, locals: { movie:movie, is_in_list:is_in_list, rating:rating })
 end
 
 post("/p/movies/movie/save/:id") do
@@ -119,6 +121,30 @@ post("/p/movies/movie/remove/:id") do
     remove_saved_movie(user_id, movie_id)
 
     redirect("/p/movies/movie/#{movie_id}")
+end
+
+post("/p/movies/movie/add_rating/:id") do
+    rating = params[:rating]
+    movie_id = params[:id]
+
+    user_id = session[:user_id]
+
+    if find_reviews_by_user_id_and_movie_id(user_id, movie_id).empty?()
+        add_rating(user_id, movie_id, rating)
+    else
+        change_rating(user_id, movie_id, rating)
+    end
+
+    all_ratings = find_reviews_by_movie(movie_id)
+    avg_rating = 0
+    all_ratings.each do |ra|
+        avg_rating += ra["rating"].to_i()   
+    end
+
+    avg_rating = avg_rating.to_f() / all_ratings.length
+    update_user_rating(movie_id, avg_rating)
+
+    redirect("p/movies/movie/#{movie_id}")
 end
 
 get("/p/watch_list") do

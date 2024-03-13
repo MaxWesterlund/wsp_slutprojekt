@@ -17,3 +17,7 @@ div id="movie_info_wrapper"
     -else 
         form action="remove/#{movie["id"]}" method="post"
             input type="submit" value="Remove from list"
+    h3 = "Your rating: #{rating}"
+    form action="add_rating/#{movie["id"]}" method="post"
+        input type="range" name="rating" min="1" max="5"
+        input type="submit" value="Rate"

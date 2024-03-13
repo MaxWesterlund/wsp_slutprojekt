@@ -5,7 +5,8 @@ nav id="movie_list"
                 img src="#{movie["poster"]}" alt="#{movie["title"]} poster"/
                 div id="movie_card_info"
                     h2 = movie["title"]
-                    h3 = movie["imdb_rating"]
+                    h3 = "user rating: #{movie["user_rating"]}"
+                    h3 = "imdb: #{movie["imdb_rating"]}"
                     p = movie["release_year"]
         end
     end
