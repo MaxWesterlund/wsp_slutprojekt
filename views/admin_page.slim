@@ -1,0 +1,7 @@
+h1 admin
+-users.each do |user|
+    -if user["username"] == "admin"
+        -next
+    p = user["username"]
+    form action="/a/remove_user/#{user["id"]}" method="post"
+        input type="submit" value="Remove"

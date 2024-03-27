@@ -7,9 +7,17 @@ require_relative "module"
 
 enable(:sessions)
 
+include Model
+
 before("/p/*") do
     # User not logged in
     if session[:user_id] == nil
+        redirect("/")
+    end
+end
+
+before("/a/*") do
+    if session[:is_admin] != true
         redirect("/")
     end
 end
@@ -70,6 +78,8 @@ post("/try_log_in") do
 
     user_id = user["id"]
     session[:user_id] = user_id
+
+    session[:is_admin] = username == "admin"
 
     change_start_message(nil, nil)
     redirect("/p/movies")
@@ -159,6 +169,17 @@ get("/p/watch_list") do
     end
 
     slim(:watch_list, locals: { movies:movies })
+end
+
+get("/a/admin_page") do
+    users = get_users()
+    slim(:admin_page, locals: { users:users })
+end
+
+post("/a/remove_user/:id") do
+    user_id = params[:id]
+    remove_user(user_id)
+    redirect("/a/admin_page")
 end
 
 def username_taken?(username)

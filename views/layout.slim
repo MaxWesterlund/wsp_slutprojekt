@@ -5,6 +5,8 @@ header id="main_header"
         a href="/" Start
         a href="/p/movies" Movies
         a href="/p/watch_list" Watch List
+        -if session[:is_admin] == true
+            a href="/a/admin_page" Admin Page
     -if session[:user_id] != nil
         div id="header_user_info"
             a href="/p/user/#{session[:user_id]}"
