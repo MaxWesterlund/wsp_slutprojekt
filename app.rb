@@ -22,10 +22,15 @@ before("/a/*") do
     end
 end
 
+# Starts the login/signup page
 get("/") do
     slim(:start, locals: { message:session[:message], message_position:session[:message_position] })
 end
 
+# Creates a new user if information is valid
+#
+# @param [String] username the username of the new user
+# @param [String] password the password of the new user
 post("/try_sign_up") do
     username = params[:username]
     password = params[:password]
@@ -56,6 +61,10 @@ post("/try_sign_up") do
     redirect("/")
 end
 
+# Logs in a user if the information is valid
+#
+# @param [String] username the username to log in to
+# @param [String] password the password to log in with
 post("/try_log_in") do
     username = params[:username]
     password = params[:password]
@@ -85,11 +94,15 @@ post("/try_log_in") do
     redirect("/p/movies")
 end
 
+# Logs out the current user
 post("/log_out") do
     session[:user_id] = nil
     redirect("/")
 end
 
+# Redirects to the userpage
+#
+# @param [Integer] user_id the id of the user
 get("/p/user/:user_id") do
     user_id = params[:user_id]
 
@@ -98,11 +111,15 @@ get("/p/user/:user_id") do
     slim(:user_page, locals: { user:user })
 end
 
+# Redirects to the movie page
 get("/p/movies") do
     movies = get_movies()
     slim(:movies, locals: { movies:movies })
 end
 
+# Redirects to the page of a spcific movie
+#
+# @param [Integer] movie_id the id of the movie
 get("/p/movies/movie/:movie_id") do
     movie_id = params[:movie_id]
     user_id = session[:user_id]
@@ -115,6 +132,9 @@ get("/p/movies/movie/:movie_id") do
     slim(:movie_info, locals: { movie:movie, is_in_list:is_in_list, rating:rating })
 end
 
+# Saves a movie to the user
+#
+# @param [Integer] id the id of the movie to save
 post("/p/movies/movie/save/:id") do
     movie_id = params[:id]
     user_id = session[:user_id]
@@ -124,6 +144,9 @@ post("/p/movies/movie/save/:id") do
     redirect("/p/movies/movie/#{movie_id}")
 end
 
+# Removes a movie from the user
+#
+# @param [Integer] id the id of the movie to remove
 post("/p/movies/movie/remove/:id") do
     movie_id = params[:id]
     user_id = session[:user_id]
@@ -133,6 +156,10 @@ post("/p/movies/movie/remove/:id") do
     redirect("/p/movies/movie/#{movie_id}")
 end
 
+# Adds a user rating to a movie
+#
+# @param [Integer] rating the rating to add
+# @param [Integer] movie_id the id of the movie to give a rating
 post("/p/movies/movie/add_rating/:id") do
     rating = params[:rating]
     movie_id = params[:id]
@@ -157,6 +184,7 @@ post("/p/movies/movie/add_rating/:id") do
     redirect("p/movies/movie/#{movie_id}")
 end
 
+# Redirects to the user watchlist
 get("/p/watch_list") do
     user_id = session[:user_id]
 
@@ -171,21 +199,32 @@ get("/p/watch_list") do
     slim(:watch_list, locals: { movies:movies })
 end
 
+# Redirects to the admin page
 get("/a/admin_page") do
     users = get_users()
     slim(:admin_page, locals: { users:users })
 end
 
+# Removes a given user
+#
+# @param [Integer] id the id of the user to remove
 post("/a/remove_user/:id") do
     user_id = params[:id]
     remove_user(user_id)
     redirect("/a/admin_page")
 end
 
+# Checks if a username is taken by another user
+#
+# @param [String] username the username to check
 def username_taken?(username)
     return !find_user_by_name(username).nil?()
 end
 
+# Changes the login/signiup message
+#
+# @param [String] message the message to change to
+# @param [String] position the position of the message (login/signup)
 def change_start_message(message, position)
     session[:message] = message
     session[:message_position] = position
